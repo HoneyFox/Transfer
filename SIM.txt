@@ -14,3 +14,23 @@ ThermalExpansion__K			7e-16
 Resistivity_Ohm_m			2e-12
 RefractiveIndex				Graphite
 RoughnessCoefficient			0.001
+
+Material SCM
+Elements				p+	Hf	O
+ElementCount				16	1	2
+Density_kg__m3				12568
+YieldStrength_MPa			950
+UltimateTensileStrength_MPa		1020
+YoungsModulus_GPa			80
+ShearModulus_GPa			135
+MeltingPoint_K				3408
+BoilingPoint_K				7289
+SpecificHeat_J__kg_K			885
+ThermalConductivity_W__m_K		18.2
+ThermalExpansion__K			4e-7
+Resistivity_Ohm_m			6.5e9
+DielectricStrength_MV__m		7500
+RelativePermittivity			25
+BandGap_eV				18.26
+RefractiveIndex				Hafnia
+RoughnessCoefficient			0.3
