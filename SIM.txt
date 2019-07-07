@@ -6,8 +6,8 @@ UltimateTensileStrength_MPa		160000000
 YieldStrength_MPa			52727409.598
 YoungsModulus_GPa			22652.2533
 ShearModulus_GPa			9452.465
-MeltingPoint_K				450000
-BoilingPoint_K				1920100
+MeltingPoint_K				450000000
+BoilingPoint_K				1920100000
 SpecificHeat_J__kg_K			20636.15
 ThermalConductivity_W__m_K		51469
 ThermalExpansion__K			7e-16
