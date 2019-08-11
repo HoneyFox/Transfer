@@ -2055,9 +2055,9 @@ rockets =
 		hoj = 1,
 		
 		PN_coeffs = {4, 				-- Number of Entries	
-					5000.0 ,0.9,		-- Less 5 km to target Pn = 1
-					10000.0, 0.35,		-- Between 10 and 5 km  to target, Pn smoothly changes from 0.5 to 1.0. 
-					15000.0, 0.04,		-- Between 15 and 10 km  to target, Pn smoothly changes from 0.2 to 0.5. Longer then 15 km Pn = 0.2.
+					5000.0 ,1.0,		-- Less 5 km to target Pn = 1
+					10000.0, 0.4,		-- Between 10 and 5 km  to target, Pn smoothly changes from 0.5 to 1.0. 
+					15000.0, 0.05,		-- Between 15 and 10 km  to target, Pn smoothly changes from 0.2 to 0.5. Longer then 15 km Pn = 0.2.
 					25000.0, 0.01};
 		
 		ModelData = {   58 ,  -- model params count
@@ -2155,9 +2155,9 @@ rockets =
 		hoj = 1,
         
         PN_coeffs = {4, 				-- Number of Entries	
-					5000.0, 0.9,		-- Less 5 km to target Pn = 1
-					10000.0, 0.35,		-- Between 10 and 5 km  to target, Pn smoothly changes from 0.5 to 1.0. 
-					15000.0, 0.04,		-- Between 15 and 10 km  to target, Pn smoothly changes from 0.2 to 0.5. Longer then 15 km Pn = 0.2.
+					5000.0, 1.0,		-- Less 5 km to target Pn = 1
+					10000.0, 0.4,		-- Between 10 and 5 km  to target, Pn smoothly changes from 0.5 to 1.0. 
+					15000.0, 0.05,		-- Between 15 and 10 km  to target, Pn smoothly changes from 0.2 to 0.5. Longer then 15 km Pn = 0.2.
 					25000.0, 0.01};
 		
 		ModelData = {   58 ,  -- model params count
