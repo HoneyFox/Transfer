@@ -150,7 +150,7 @@ AGM_84D =
 		finsLimit					= 0.68,
 		inertial_km_error			= 0.2,
 		max_heading_err_val 		= 0.05, --0.09
-		skim_glide_height			= 5.0, --3.0
+		skim_glide_height			= 3.0,
 		pre_maneuver_glide_height	= 15.0,
 	},
 	
