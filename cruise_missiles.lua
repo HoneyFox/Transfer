@@ -127,7 +127,7 @@ AGM_84D =
 		ship_track_by_default		= 1,
 		flag_dist					= 5000.0,
 		sens_near_dist				= 10.0,
-		sens_far_dist				= 15000.0,
+		sens_far_dist				= 20000.0, --15000.0
 		primary_target_filter		= 1,
 		add_y						= 3.0,		
 	},
@@ -176,7 +176,7 @@ AGM_84D =
 	triggers_control = {
 		action_wait_timer				= 5,	-- wait for dist functions n sen, then set default values
 		default_sensor_tg_dist			= 8000, -- turn on seeker and start horiz. correction if target is locked
-		default_final_maneuver_tg_dist	= 4000, --4000
+		default_final_maneuver_tg_dist	= 4000,
 		default_straight_nav_tg_dist	= 700,
 		default_destruct_tg_dist		= 1000,	-- if seeker still can not find a target explode warhead after reaching pred. target point + n. km
 		trigger_by_path					= 1,
