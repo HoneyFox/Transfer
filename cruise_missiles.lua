@@ -145,11 +145,11 @@ AGM_84D =
 		cmd_Kd						= 10.0,
 		glide_height				= 15.0,
 		use_current_height			= 1,
-		max_vert_speed 				= 180.0, --70.0
+		max_vert_speed 				= 280.0, --70.0
 		altim_vel_k					= 2.0, --1.0
 		finsLimit					= 0.68,
 		inertial_km_error			= 0.2,
-		max_heading_err_val 		= 0.04, --0.09
+		max_heading_err_val 		= 0.05, --0.09
 		skim_glide_height			= 5.0, --3.0
 		pre_maneuver_glide_height	= 15.0,
 	},
