@@ -127,7 +127,7 @@ AGM_84D =
 		ship_track_by_default		= 1,
 		flag_dist					= 5000.0,
 		sens_near_dist				= 10.0,
-		sens_far_dist				= 20000.0, --15000.0
+		sens_far_dist				= 35000.0, --15000.0
 		primary_target_filter		= 1,
 		add_y						= 3.0,		
 	},
@@ -136,8 +136,8 @@ AGM_84D =
 	{
 		delay						= 1.0,
 		Kpv							= 0.046, --0.026
-		Kdv							= 20.0, --8.0
-		Kiv							= 0.000005, --0.000004
+		Kdv							= 12.0, --2.4
+		Kiv							= 0.000006,
 		Kph							= 40.0, --28.0
 		Kdh							= 5.0, --3.0
 		Kih							= 0.0,
@@ -145,13 +145,14 @@ AGM_84D =
 		cmd_Kd						= 10.0,
 		glide_height				= 15.0,
 		use_current_height			= 1,
-		max_vert_speed 				= 280.0, --70.0
+		max_vert_speed 				= 160.0, --70.0
 		altim_vel_k					= 2.0, --1.0
 		finsLimit					= 0.68,
 		inertial_km_error			= 0.2,
 		max_heading_err_val 		= 0.05, --0.09
-		skim_glide_height			= 3.0,
-		pre_maneuver_glide_height	= 15.0,
+		skim_glide_height			= 5.0, --8.0
+		pre_maneuver_glide_height	= 15.0, --20.0
+		vel_proj_div				= 20.0,
 	},
 	
 	final_autopilot =		
@@ -177,7 +178,7 @@ AGM_84D =
 		action_wait_timer				= 5,	-- wait for dist functions n sen, then set default values
 		default_sensor_tg_dist			= 8000, -- turn on seeker and start horiz. correction if target is locked
 		default_final_maneuver_tg_dist	= 1000, --4000
-		default_straight_nav_tg_dist	= 700,
+		default_straight_nav_tg_dist	= 1000,
 		default_destruct_tg_dist		= 1000,	-- if seeker still can not find a target explode warhead after reaching pred. target point + n. km
 		trigger_by_path					= 1,
 		pre_maneuver_glide_height		= 15,	-- triggers st nav instead of fin. maneuver if h>2*pre_maneuver_glide_height at fin. maneuver distance
