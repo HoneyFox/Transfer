@@ -1,0 +1,21 @@
+Material Proton (Combustable Monopropellant)
+Elements					p+
+ElementCount					1
+Density_kg__m3					70.85
+EnthalpyOfFormation_kJ__mol			644811457
+MeltingPoint_K					14.01
+BoilingPoint_K					20.28
+SpecificHeat_J__kg_K				20636.15
+ThermalConductivity_W__m_K			1815
+RefractiveIndex					Hydrogen
+
+Material Deuterium (Combustable Monopropellant)
+Elements					D
+ElementCount					1
+Density_kg__m3					162.4
+EnthalpyOfFormation_kJ__mol			23341731
+MeltingPoint_K					18.73
+BoilingPoint_K					23.67
+ThermalConductivity_W__m_K			.13007
+SpecificHeat_J__kg_K				10327.18
+RefractiveIndex					Deuterium

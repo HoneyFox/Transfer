@@ -1,0 +1,69 @@
+ChemicalReaction Matter-Antimatter Proton Antiproton
+Reactants					Proton (Antimatter Reactant)	Antiproton (Antimatter Reactant)
+ReactantCounts					1				1
+Products					Electron (Product)		Positron (Product)
+ProductCounts					1				1
+ActivationEnergy_kJ__mol			0
+AutoignitionTemperature_K			1000000000
+CharacteristicLength_m				0.5
+
+ChemicalReaction Fusion proton-proton chain reaction
+Reactants					Proton (Fusion Reactant Monopropellant)
+ReactantCounts					4
+Products					Helium
+ProductCounts					1
+ActivationEnergy_kJ__mol			1000000000
+AutoignitionTemperature_K			232100000
+CharacteristicLength_m				0.5
+
+ChemicalReaction Fusion Deuterium Deuterium
+Reactants					Deuterium (Fusion Reactant Monopropellant)
+ReactantCounts					2
+Products					Proton (Product)			Monatomic Tritium
+ProductCounts					1				1
+ActivationEnergy_kJ__mol			4824266
+AutoignitionTemperature_K			153000000
+CharacteristicLength_m				0.5
+
+ChemicalReaction Fusion Deuterium Tritium
+Reactants					Deuterium (Fusion Reactant)	Tritium (Fusion Reactant)
+ReactantCounts					1				1
+Products					Helium
+ProductCounts					1
+ActivationEnergy_kJ__mol			4824266
+AutoignitionTemperature_K			153000000
+CharacteristicLength_m				0.5
+
+ChemicalReaction Fusion Deuterium Helium-3
+Reactants					Deuterium (Fusion Reactant)	Helium-3 (Fusion Reactant)
+ReactantCounts					1				1
+Products					Proton (Product)		Helium
+ProductCounts					1				1
+ActivationEnergy_kJ__mol			19297066
+AutoignitionTemperature_K			232100000
+CharacteristicLength_m				0.5
+
+ChemicalReaction Fusion proton Boron-11
+Reactants					Proton (Fusion Reactant)	Boron-11 (Fusion Reactant)
+ReactantCounts					1				1
+Products					Helium
+ProductCounts					3
+ActivationEnergy_kJ__mol			239262804
+AutoignitionTemperature_K			1320000000
+CharacteristicLength_m				0.5
+
+ChemicalReaction Proton (Combustable Monopropellant)
+Reactants					Proton (Combustable Monopropellant)
+ReactantCounts					4
+Products					Helium
+ProductCounts					1
+ActivationEnergy_kJ__mol			1000000000
+AutoignitionTemperature_K			232100000
+
+ChemicalReaction Deuterium (Combustable Monopropellant)
+Reactants					Deuterium (Combustable Monopropellant)
+ReactantCounts					2
+Products					Proton (Product)			Monatomic Tritium
+ProductCounts					1				1
+ActivationEnergy_kJ__mol			4824266
+AutoignitionTemperature_K			153000000

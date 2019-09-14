@@ -34,3 +34,36 @@ RelativePermittivity			25
 BandGap_eV				18.26
 RefractiveIndex				Hafnia
 RoughnessCoefficient			0.3
+
+
+Material SIM U-233 Cermet
+Elements				U-233	p+
+ElementCount				81	1
+Density_kg__m3				18970
+YieldStrength_MPa			4163508
+UltimateTensileStrength_MPa		10887500
+YoungsModulus_GPa			18550
+ShearModulus_GPa			7223.9
+MeltingPoint_K				429900
+SpecificHeat_J__kg_K			5886
+ThermalConductivity_W__m_K		1630
+ThermalExpansion__K			8.76e-14
+Resistivity_Ohm_m			2.8e-7
+RefractiveIndex				Graphite
+RoughnessCoefficient			0.001
+
+Material SIM Boron Nitride Cermet
+Elements				N	B	p+
+ElementCount				2	35.2	1
+Density_kg__m3				4846
+YieldStrength_MPa			4163508
+UltimateTensileStrength_MPa		10887500
+YoungsModulus_GPa			18550
+ShearModulus_GPa			7223.9
+MeltingPoint_K				429900
+SpecificHeat_J__kg_K			5662
+ThermalConductivity_W__m_K		1570
+ThermalExpansion__K			2.76e-13
+Resistivity_Ohm_m			2.75e-7
+RefractiveIndex				Graphite
+RoughnessCoefficient			0.001
