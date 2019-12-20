@@ -1,0 +1,38 @@
+gravityAcc = Vector3(0, -9.81, 0);
+dt = 0.01;
+maxPredictSteps = 800;	// Assuming max projectile lifetime is 8 sec.
+projMass = ...;
+lastFrameTargetVel;
+lastFrameTargetPos;
+...
+LCOSEvaluator::UpdateLCOSPipperWithRadarContact(RadarContact radarContact)	// Executed when radar has a target-lock and is in gun mode
+{
+	projPos = aircraft.LocalToWorldPos(muzzlePos);
+	projVel = aircraft.velocity + Vector3::Normalize(aircraft.LocalToWorldDir(muzzleDirection)) * projSpeed;
+	targetPos = radarContact.predictedTargetPos;	// Assuming that radar system has smoothed/predicted the target position since the last contact update.
+	targetVel = (targetPos - lastFrameTargetPos) / dt;	// Perhaps radar system can provide this information directly?
+	targetAcc = (targetVel - lastFrameTargetVel) / dt;
+	lastFrameTargetPos = targetPos;
+	lastFrameTargetVel = targetVel;
+	steps = 0;
+
+	while(steps < maxPredictSteps)
+	{
+		// Use simple Euler integration to predict projectile & target trajectory.
+		projVel += (CalcProjAeroForce(projPos, projVel) / projMass + gravityAcc) * dt;
+		projPos += projVel * dt;
+		targetVel += targetAcc * dt;	// Assuming target maintains its current acceleration.
+		targetPos += targetVel * dt;
+
+		// Check if the projectile has traveled past the target.
+		if (Vector3::Dot(projVel, targetPos - projPos) <= 0)
+		{
+			break;
+		}
+
+		steps++;
+	}
+
+	error = targetPos - projPos;
+	lcosPipper.HUDPos = WorldToHUDCoords(radarContact.Position - error);
+}
