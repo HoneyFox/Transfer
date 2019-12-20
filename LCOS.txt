@@ -1,4 +1,4 @@
-gravityAcc = Vector3(0, -9.81, 0);
+gravityAcc = Vector3(0, 0, -9.81);	// Assuming Z axis is vertical.
 dt = 0.01;
 maxPredictSteps = 800;	// Assuming max projectile lifetime is 8 sec.
 projMass = ...;
@@ -34,5 +34,5 @@ LCOSEvaluator::UpdateLCOSPipperWithRadarContact(RadarContact radarContact)	// Ex
 	}
 
 	error = targetPos - projPos;
-	lcosPipper.HUDPos = WorldToHUDCoords(radarContact.Position - error);
+	lcosPipper.hudPos = WorldToHUDCoords(radarContact.Position - error);
 }
