@@ -1,0 +1,102 @@
+<!-- sizeX and sizeY should be the same as the texture's width and height for best image quality ! ... but is not mandatory -->
+
+<!-- Entity types
+Static
+Human
+Door
+Cover
+RescueZone
+TimeBomb
+Sound
+DeployZone
+SpawnZone
+SpawnPoint
+Sniper
+Window
+FX
+-->
+
+<!-- RenderObject2D parameters
+"layer" =
+BACKGROUND				= 0, // full screen background image
+DECALS					= 1, // these appear under all other entities: stamp entities, fx like blood etc
+LOWOBJECTS				= 2, // furniture usually, things that should appear below the player's characters
+DEFAULT					= 3, // characters
+LAYER_OVERLAY			= 4, // anything that should go on top of characters
+LAYER_OVERLAY2			= 5,
+LAYER_FX				= 6
+
+"blendMode" = none, normal, multiply, add, add_masked, overlay
+(default is normal)
+
+"sizeX" / "sizeY" - use this if you want to resize the texture from its original size
+
+"flipX" = "true" / "false"
+"flipY" = "true" / "false"
+-->
+
+<!--
+Possible entity parameters:
+
+	fogOfWarVisibility="hidden / partial(default) / full"
+
+	// these are preferable for object instances
+	origin="x y"
+	rotation="x"
+	hidden="true/false(default)"
+-->
+
+<!-- Collision type flags
+type="static(default, for things that don't move or think)/dynamic"
+value= can be one or more (the sum of...) of the following
+CM_MOVEMENT_OK					= 0, // allow movement
+CM_MOVEMENT_CAN_BE_JUMPED		= 1, // blocks movement but can be jumped over
+CM_MOVEMENT_BLOCK				= 2, // full movement block
+CM_VISION_OK					= 4, // allows vision
+CM_VISION_BLOCK_CROUCHED		= 8, // hides crouched characters
+CM_VISION_BLOCK					= 16, // full vision block
+-->
+
+<Entities>
+
+	<!-- Dead Civilians -->
+	<Entity name="DeadCivA" type="Static" fogOfWarVisibility="partial">
+		<CollisionInfo type="static" flags="6"/>
+		<RenderObject2D texture="data/textures/People/deadcivA.dds" layer="2"/>
+	</Entity>
+	
+	<Entity name="DeadCivB" type="Static" fogOfWarVisibility="partial">
+		<CollisionInfo type="static" flags="6"/>
+		<RenderObject2D texture="data/textures/People/deadcivB.dds" layer="2"/>
+	</Entity>
+	
+	<!-- Bar Down Tip -->
+	<Entity name="BarDownTip" type="Static" fogOfWarVisibility="partial">
+		<CollisionInfo type="static" flags="4"/>
+		<RenderObject2D texture="data/textures/Maps/BarDown/BarDownText.dds" layer="1" blendMode="none"/>
+	</Entity>
+	
+	<!-- Blackhawk Barrier -->
+	<Entity name="BlackHawkBarrier" type="Cover" fogOfWarVisibility="hidden">
+		<CollisionInfo type="static" flags="8"/>
+		<RenderObject2D texture="data/textures/Maps/BarDown/BlackHawkWall.dds" layer="1" blendMode="none"/>
+	</Entity>
+	
+	<!-- Projectiles -->
+	<Entity name="MWMRPGProjectileBody" type="Projectile" fogOfWarVisibility="full">
+		<RenderObject2D texture="data/textures/Weapons/RPGRocketBody.tga" layer="11" sizeX="8" sizeY="16"/>
+	</Entity>
+	
+	<Entity name="MWMMGLProjectileBody" type="Projectile" fogOfWarVisibility="full">
+		<RenderObject2D texture="data/textures/Weapons/RPGRocketBody.tga" layer="11" sizeX="4" sizeY="8"/>
+	</Entity>
+	
+	<Entity name="MWMArrowProjectileBody" type="Projectile" fogOfWarVisibility="full">
+		<RenderObject2D texture="data/textures/fx/bullet_trace_shotgun.dds" layer="11" sizeX="48" sizeY="2"/>
+	</Entity>
+	
+	<Entity name="MWMKnifeProjectile" type="Projectile" fogOfWarVisibility="full">
+		<RenderObject2D texture="data/textures/weapons/ThrowingKnifeProjectile.tga" layer="11" sizeX="8" sizeY="16"/>
+	</Entity>
+	
+</Entities>
