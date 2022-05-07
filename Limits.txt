@@ -1,0 +1,354 @@
+Color
+	Hue_degrees		0	360
+	Saturation		0	1
+	Value			0	1
+	Alpha			0	1
+
+PostProcessSettings
+	BloomAmount				0		5
+
+GameGraphicsSettings
+	FieldOfView_degrees		30		120
+	Brightness_Percent		0		1
+	ScreenScaling_Percent		.5		1
+
+AudioSettings
+	MasterVolume_Percent		0		1
+	MusicVolume_Percent		0		1
+	InterfaceVolume_Percent	0		1
+	EffectsVolume_Percent		0		1
+
+BlackBoxEngineModule
+	PowerConsumption_W	1.		1e9
+	Mass_kg				.1		1e9
+	ExhaustVelocity_km__s	1e-3		100000.
+	Thrust_N				1e-9		1e12
+	HeatSignature_W		1e3		1e15
+	Dimensions			1e-3		1e3
+	GimbalAngle_degrees	0.		90.
+
+BlackBoxWeaponModule
+	PowerConsumption_W	1.		1e9
+	Mass_kg				.1		1e9
+	Dimensions			1e-3		1e3
+	MuzzleVelocity_km__s	0.01		1000.
+	Accuracy_radians		0.		1.57
+	ReloadTime_s			0.		3600.
+
+BlackBoxLaserInfoSubModule
+	Wavelength_nm				100.		600000
+	Efficiency_Percent		0		1
+	ApertureRadius_m			1e-6		100
+	BeamQualityFactor			1.		1e6
+	CoolantMassFlowRate_kg__s	1.		1e6
+	EngagementRange_km		1		250
+	RadiatorTemperature_K		1.		5000.
+
+BlackBoxRadiationSubModule
+	GammaRadiation_W			0	1e15
+	ThermalNeutronRadiation_W	0	1e15
+	FastNeutronRadiation_W		0	1e15
+
+BlackBoxPowerModule
+	Dimensions			1e-3		1e3
+	Mass_kg				.1		1e9
+	PowerProduction_W	1e-3	1e15
+	Efficiency_Percent	.01		1
+	OutletMassFlow_kg__s	1e-3	1e9
+	OutletTemperature_K	1		10000
+
+HomingPhase
+	DampingEngineMultiplier	0.		10.
+
+HomingProperties
+	PropellantForBoostPhase_Percent	0		1
+	IrradianceCutoff_Percent		0		1
+
+RemoteControlModule
+	AspectRatio				.5		8.
+
+FuseModule
+	AspectRatio				.5		8.
+	EngineDelay_s			0.		1000.
+	PayloadDelay_s			0.		1000.
+
+CrewModule
+	ShellThickness_m			.01		10
+	CrewCapacity				1		1000
+
+HeatExchangerSubModule
+	Length_m					.10		10
+	InnerRadius_m				.01		10
+	WallThickness_m			.01		10
+	OuterRadius_m				.01		10
+
+AmmoModule
+	ArmorThickness_m		.001		50
+
+AmmoBaySubModule
+	Capacity				1		100000
+	Stacks				1		10000
+
+BallisticTubeSubModule
+	Length_m					.1		100
+	Thickness_m				.001		10
+
+SolidPropellantSubModule
+	Mass_kg					.001		5000
+	GrainRadius_m				.0001	1.
+
+BlastLauncherModule
+	PayloadRows					1		100
+	PayloadColumns				1		100
+	ExplosiveMass_kg			.001	1000
+	ArmorThickness_m			.001	10.
+	EngagementRange_km			0.		10000.
+	LaunchCountCap			0		1000
+
+CarrierModule
+	LauncherLength_m			0		50
+	ArmorThickness_m			.001		10.
+	EngagementRange_km		0.		10000.
+	CoolantInletTemperature_K	50		5000
+	LaunchCountCap			0		1000
+
+LinearInductionMotorSubModule
+	TrackLength_m				.10		10
+	TrackWidth_m				.10		40
+	StatorDepth_m				.001		1
+	ForcerRadius_m			.001		1
+	PowerConsumption_W		1		1e9
+
+LinearMotorSubModule
+	PowerConsumption_W		1		100e6
+
+BarrelArmorSubModule
+	Thickness_m				0		10.
+
+SolenoidSubModule
+	WireRadius_m				.001		.1
+
+SolenoidSubModule
+	NumberOfTurns				1		50
+	NumberOfLayers			1		20
+
+CoilgunModule
+	PowerConsumption_W		100		1e9
+	BarrelArmorThickness_m	0.		1.
+	NumberOfStages			1		200
+
+CapacitorSubModule
+	Separation_m				100e-9	10
+	Dimensions_m				1e-3		100
+
+CapacitorBankSubModule
+	Separation_m				100e-9	10
+	Dimensions_m				1e-3		100
+	Count					1		20
+
+RailsSubModule
+	Thickness_m				.01		10
+	Length_m					.1		200
+
+RailgunModule
+	PowerConsumption_W		100		1e9
+	BarrelArmorThickness_m	0.		1.
+
+MassProjectileSubModule
+	Mass_kg					1e-12		5000
+	BoreRadius_m				.0000005		10.
+
+BarrelCoolingSubModule
+	CoolantInletTemperature_K	50		5000
+
+ExplosiveModule
+	Length_m					.01		5
+	ExplosiveMass_kg			.0001	100
+	ShrapnelMass_kg			0.		1000
+
+FlareModule
+	ArmorThickness_m			.001		1.
+	Cylinder_m				.01		10.
+
+FrequencyDoublerSubModule
+	OpticLength_m				1e-6		.10
+	OpticRadius_m				1e-6		1.
+
+ArcLampPumpSubModule
+	PowerSupplied_W			100e3	10e9
+	Radius_m					.001		10.
+
+FixedLaserMountSubModule
+	ArmorThickness_m			1e-3		1.
+
+LaserModule
+	LasingRodRadius_m			.001		10
+	CoolantInletTemperature_K	50		5000
+	EngagementRange_km		1		1000
+	ApertureRadius_m			1e-6		100
+	OpticalNodes				500e3	1e9
+
+ReactionWheelSubModule
+	RotationalSpeed_RPM		1		1e5
+
+TurretMotorSubModule
+	PowerConsumption_W		1		1e9
+
+TurretSubModule
+	InnerRadius_m				.001		50
+	ArmorThickness_m			.0001	1
+	AttachmentCount				1		20
+
+ExtrudableTurretSubModule
+	InnerRadius_m				.001		50
+	ArmorThickness_m			.0001	1
+	AttachmentCount				1		20
+
+ExtrudableSoloTurretSubModule
+	InnerRadius_m				.001		50
+	ArmorThickness_m			.0001	1
+
+RefuelerModule
+	HoseLength_m				10		1000
+
+RadiatorModule
+	PanelWidth_m				.01		50
+	Height_m					.01		50
+	Thickness_m				.001		1
+	ArmorThickness_m			.001		1
+	FrontTaper_radians		0.		1.55334
+	BackTaper_radians			0.		1.55334
+	Panels					1		20
+
+ThermalRocketSubModule
+	ThroatRadius_m				.001		10
+	ChamberWallThickness_m		.0001		.10
+	ChamberContractionRatio		1		100
+	NozzleExpansionRatio			1		1000
+	NozzleExpansionAngle_degrees	1.		45.
+	RegenerativeCooling_Percent	0		1
+
+MagnetoplasmadynamicThrusterModule
+	CathodeRadius_m			.001		1
+	ChamberThickness_m		.01		10
+	AnodeThickness_m			.001		1
+	ThrusterLength_m			.01		10
+	Current_A				100		1e6
+
+ResistojetModule
+	PowerSupplied_W			100		10e9
+	ChamberLength_m			.01		10
+	CoilRadius_m				.0001		.1
+
+ThermoelectricFissionReactorModule
+	ReactorCoreDimensions_m		.01		50
+	ThermocoupleInnerDimensions_m	.01		50
+
+TurboelectricFissionReactorModule
+	CoolantInletPressure_Pa		1e3		10e6
+	CoolantInletTemperature_K		50		5000
+	ReactorCoreDimensions_m		.10		50
+
+TurbopumpSubModule
+	PumpRadius_m				.001		20.
+	RotationalSpeed_RPM		1.		1e5
+	StageCount				1		25
+
+TurbineSubModule
+	AbsoluteInletAngle_degrees		1		89
+	StageCount					1		25
+
+NuclearReactorSubModule
+	ModeratorMass_kg			0		10000
+	FuelMass_kg				.001		10000
+	FuelEnrichment_Percent	.0072	.97
+	ControlRodMass_kg			0		10000
+	ReflectorThickness_m		0		1.
+	AverageNeutronFlux__m2_s	1e16		1e21
+
+NuclearThermalRocketModule
+	ReactorCoreHeight_m		.01		10
+
+NuclearPayloadModule
+	CoreMass_kg				.0001		1000
+	Enrichment_Percent		.0072	.97
+	HollowCoreRadius_m		0		5
+	InnerExplosiveWidth_m		.001		1
+	FusionFuelDensity_kg__m3	0		10000
+
+ProximityDetonator
+	HardRange_km				0		10
+	MinimumRange_km			0		10
+	OverrideTimer_s			0		600.
+
+CombustionMixtureSubModule
+	DelayCompositionMassFraction	0		1
+
+ThermocoupleSubModule
+	Length_m					.001		10
+
+TankEjectorSubModule
+	ExplosiveBoltMass_kg		0		100
+
+PropellantTankModule
+	ReactionMass_kg				1e-7		100e6
+	HeightToRadiusRatio			.05		20
+	AdditionalArmorThickness_m		0.		1.
+
+RadioisotopePelletSubModule
+	Mass_kg					1e-3		1000
+	Height_m					0.01		10
+
+SpacerModule
+	Dimensions_m				0.		50.
+
+CargoModule
+	Mass_kg					1.		1e9
+	AspectRatio				.01		10.
+
+RadiationShieldModule
+	Dimensions_m				.0001		50.
+
+CraftBlueprintArmor
+	LayerCount				0		40
+	DistanceFromLastLayer_m	0.		10.
+	Thickness_m				.0001	10.
+	AspectRatio				.1		10.
+
+Level
+	Date_JulianYears				2000	3000
+	TimeLimit_JulianDays	0		3600
+	Fleets					-10		5
+
+StarterFleet
+	ShipCount				1		100
+	FuelLossPercent			0		1
+	AmmoLossPercent			0		1
+
+OrbitalElements
+	Epoch_JulianYears					1950	2050
+	SemiMajorAxis_km					1		1e10
+	Eccentricity						0		.999
+	InclinationToRelativePlane_degrees	-180	180
+	LongitudeOfAscendingNode_degrees	0		360
+	ArgumentOfPeriapsis_degrees			0		360
+	MeanAnomaly_degrees					0		360
+
+CelestialBody
+	Mass_kg					1		1e32
+	Radius_km				.1		1e10
+	Radii_km				.1		1e10
+	SurfaceTemperature_K	0		10000
+	Albedo					.001	.999
+
+CelestialAtmosphere
+	SurfacePressure_Pa		1e-10	1e10
+	Composition				0		1
+
+CelestialRotation
+	AxialTilt_degrees			0		180
+	SiderealRotationPeriod_s	-1e10	1e10
+
+CelestialRing
+	StartRadius_km				1	1e7
+	EndRadius_km				1	1e7
