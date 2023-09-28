@@ -1,0 +1,183 @@
+Vehicle::Awake() -> Create 2 SimObjects for this Vehicle in SimController
+SimController::FixedUpdate()	-> Prepare jobs and send to thread pool to update.
+(Threaded) UpdateJobMain()	-> Update SimObjects in job.simObjects[start:end]
+				-> Create CreatedVehicle class instances and add into job.createdVehicles.
+				-> Create DestroyedVehicle class instances and add into job.destroyedVehicles.
+				-> Semaphore.Release(1) after all SimObjects::Update() is completed.
+SimController::FixedUpdate()	-> Wait for all jobs to complete.
+				-> Swap currentFrameIndex
+				-> Apply 
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+MainThread   | Prepare Job1 | Use Data0 to render  | Wait for Job1                                     | Swap | Prepare Job0 | Use Data1 to render
+-------------------------------------------------------------------------------------------------------|---------------------------------------------------------
+JobThreads     | UpdateJob::Use Data0 to update Data1                                                  |        | UpdateJob::Use Data1 to update Data0
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+class UpdateJob
+{
+	List<SimObject>[] simObjects;
+	int srcIndex;
+	int start;
+	int end;
+	
+	UpdateJob(List<SimObject>[] simObjects, srcIndex, start, end) {}
+}
+
+class SimController
+{
+	int currentFrameIndex = 1;
+	int dispatchedJobCount = 0;
+	Dictionary<SimObject, Vehicle> simObjectVehicleMap;
+	List<SimObject>[] simObjects = new [2];
+	List<UpdateJob>[] jobs = new [2];
+
+	FixedUpdate()
+	{
+		PrepareJobs(jobs, currentFrameIndex);
+		StartJobs(jobs);
+		WaitForJobs(dispatchedJobCount);
+		SwapData();
+	}
+	
+	PrepareJobs()
+	{
+		var jobCount = (simObjects.Count * 4 + simObjects.Count * simObjects.Count) / 4096;
+		simObjectsPerJob = Mathf.CeilToInt((float)simObjects.Count / jobCount);
+		for(int i = 0; i < jobCount; ++i)
+		{
+			UpdateJob job = new UpdateJob(simObjects, currentFrameIndex, i * simObjectsPerJob, min(jobCount, i * simObjectsPerJob + simObjectsPerJob));
+		}
+	}
+	
+	StartJobs(List<UpdateJob> jobs)
+	{
+		dispatchedJobCount += jobs.Count;
+		foreach (UpdateJob job in jobs)
+		{
+			ThreadPool.QueueUserWorkItem(UpdateJobMain, job);
+		}
+	}
+	
+	UpdateJobMain(job)
+	{
+		var srcSimObjects = job.simObjects[job.srcIndex];
+		for(int i = job.start; i < job.end; ++i)
+		{
+			srcSimObjects[i].Update();
+		}
+	}
+
+	WaitForJobs(Semaphore sema, int count)
+	{
+		// Wait for all jobs to be done.
+		for(int i = 0; i < count; ++i)
+			sema.WaitOne();
+	}
+
+	SwapData()
+	{
+		currentFrameIndex = 1 - currentFrameIndex;
+		UpdateJob job = jobs[currentFrameIndex]
+		foreach (CreatedVehicle cv in jobs[currentFrameIndex].createdVehicles)
+		{
+			CreateVehicle(cv);
+		}
+		foreach (DestroyedVehicles dv in jobs[currentFrameIndex].destroyedVehicles)
+		{
+			Destroy(simObjectVehicleMap[dv]);
+		}
+	}
+}
+
+class Vehicle : MonoBehavior
+{
+	SimVehicle[2] simVehicles;
+
+	SyncToSim()
+	{
+		simVehicles[currentFrameIndex].SyncTransform(this.transform.localPosition, ...);
+	}
+}
+
+class SimTransform
+{
+	// All variables are synchronized from main thread by SyncTransform().
+	Vector3 localPosition;
+	Vector3 localEulers;
+	Quaternion localRotation;
+	Vector3 worldPosition;
+	Vector3 worldEulers;
+	Quaternion worldRotation;
+	Vector3 forward;
+	Vector3 up;
+	Vector3 right;
+}
+
+class SimObject
+{
+	SimObject swappedSimObject;
+
+	SimTransform transform = new;
+	
+	Dictionary<Type, List<SimComponent>> components = new;
+	List<SimObject> children = new;
+	
+	GetComponents<T>() { return components.ContainsKey(T) ? components[T] : null; }
+	GetComponent<T>() { return GetComponents<T>()?[0]; }
+	GetChild(int index) { return (index >= 0 && index < children.Count) ? children[index] : null; }
+	GetChildCount() { return children.Count; }
+	
+	AddComponent<T>() where T : SimComponent
+	{
+		var c = new T();
+		if (components.ContainsKey(T))
+			return components[T].Add(c);
+		else
+			var list = new List<SimObject>();
+			components[T] = list;
+			list.Add(c);
+		return c;
+	}
+	
+	RemoveComponent(c) where T : SimComponent
+	{
+		if (components.ContainsKey(c.GetType()))
+			components[c.GetType()].Remove(c);		
+	}
+	
+	SyncTransform(Vector3 localPosition, ...)
+	{
+		this.transform.localPosition = localPosition;
+		...
+	}
+	
+	// If we want to update the object, modify values inside dstObject.
+	Update(SimObject dstObject)
+	{
+		foreach(KeyValuePair<Type, List<SimComponent>> kv in components)
+		{
+			foreach(SimComponent sc in kv.Value)
+			{
+				if (sc.enabled)
+					sc.Update();
+			}
+		}
+	}
+}
+
+class SimComponent
+{
+	SimComponent swappedSimComponent;
+	
+	bool enabled;
+	virtual Update()
+	{
+	}	
+}
+
+class SimVehicle : SimComponent
+{
+	
+}
