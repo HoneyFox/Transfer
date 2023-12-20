@@ -264,3 +264,227 @@ class J3DFile:
             f.write(i.to_bytes(1, 'little', true))
         for mat in self.mats:
             mat.serialize(f)
+
+import struct
+import typing
+
+class Vertex:
+    def __init__(self):
+        self.pos = None
+        self.normal = None
+        self.uv = None
+
+    def set_pos(self, x: float, y: float, z: float):
+        self.pos = [x, y, z, 0]
+
+    def set_normal(self, x: float, y: float, z: float):
+        self.normal = [x, y, z]
+
+    def set_uv(self, u: float, v: float):
+        self.uv = [0, u, 1.0 - v]
+
+class Triangle:
+    def __init__(self):
+        self.indices = None
+
+    def set_indices(self, i0: int, i1: int, i2: int):
+        self.indices = [i0, i1, i2]
+
+class Material:
+    def __init__(self):
+        self.name = None
+        self.ambient = None
+        self.diffuse = None
+        self.specular = None
+        self.emissive = None
+        self.shininess = None
+        self.tex_name = None
+
+        self.index = -1
+
+    def set_name(self, name: str):
+        self.name = name
+
+    def set_ambient_color(self, r: float, g: float, b: float, a: float):
+        self.ambient = [r, g, b, a]
+
+    def set_diffuse_color(self, r: float, g: float, b: float, a: float):
+        self.diffuse = [r, g, b, a]
+
+    def set_specular_color(self, r: float, g: float, b: float, a: float):
+        self.specular = [r, g, b, a]
+
+    def set_emissive_color(self, r: float, g: float, b: float, a: float):
+        self.emissive = [r, g, b, a]
+
+    def set_shininess(self, shininess: float):
+        self.shininess = shininess
+
+    def set_tex_name(self, tex_name: str):
+        self.tex_name = tex_name
+
+# Similar to J3DFile.py: class Model.
+class Object:
+    def __init__(self):
+        self.name: str = None
+        self.verts: list[Vertex] = []
+        self.uvs: list[list[float]] = []
+        self.normals: list[list[float]] = []
+        self.tris: list[Triangle] = []
+        self.mat: Material = None
+
+    def set_name(self, name: str):
+        self.name = name
+
+    def add_vert(self, vert: Vertex):
+        self.verts.append(vert)
+
+    def add_tri(self, tri: Triangle):
+        self.tris.append(tri)
+
+    def set_material(self, mat: Material):
+        self.mat = mat
+
+class WavefrontOBJFile:
+    def __init__(self):
+        self.objects: list[Object] = []
+        self.mats: list[Material] = []
+
+    def get_mat_by_name(self, name: str):
+        for mat in self.mats:
+            if mat.name == name:
+                return mat
+        return None
+
+    @staticmethod
+    def load_material_library(path: str) -> list[Material]:
+        f = open(path, 'r')
+        lines: list[str] = f.readlines()
+        lines = [line.strip() for line in lines]
+        f.close()
+
+        results = []
+        cur_mat: Material = None
+        for line in lines:
+            if line.startswith("#"):
+                continue
+            if line.startswith("newmtl "):
+                cur_mat = Material()
+                cur_mat.set_name(line[7:])
+                results.append(cur_mat)
+            elif line.startswith("Ns "):
+                cur_mat.set_shininess(float(line[3:]))
+            elif line.startswith("Ka "):
+                components = line.split(' ')
+                cur_mat.set_ambient_color(float(components[1]), float(components[2]), float(components[3]), float(components[4]) if len(components) == 5 else 1.0)
+            elif line.startswith("Kd "):
+                components = line.split(' ')
+                cur_mat.set_diffuse_color(float(components[1]), float(components[2]), float(components[3]), float(components[4]) if len(components) == 5 else 1.0)
+            elif line.startswith("Ks "):
+                components = line.split(' ')
+                cur_mat.set_specular_color(float(components[1]), float(components[2]), float(components[3]), float(components[4]) if len(components) == 5 else 1.0)
+            elif line.startswith("Ke "):
+                components = line.split(' ')
+                cur_mat.set_emissive_color(float(components[1]), float(components[2]), float(components[3]), float(components[4]) if len(components) == 5 else 1.0)
+            elif line.startswith("d "):
+                opaque = float(line[2:])
+                cur_mat.set_ambient_color(cur_mat.ambient[0], cur_mat.ambient[1], cur_mat.ambient[2], cur_mat.ambient[3] * opaque)
+                cur_mat.set_diffuse_color(cur_mat.diffuse[0], cur_mat.diffuse[1], cur_mat.diffuse[2], cur_mat.diffuse[3] * opaque)
+                cur_mat.set_specular_color(cur_mat.specular[0], cur_mat.specular[1], cur_mat.specular[2], cur_mat.specular[3] * opaque)
+                cur_mat.set_emissive_color(cur_mat.emissive[0], cur_mat.emissive[1], cur_mat.emissive[2], cur_mat.emissive[3] * opaque)
+            elif line.startswith("Tr "):
+                opaque = 1.0 - float(line[3:])
+                cur_mat.set_ambient_color(cur_mat.ambient[0], cur_mat.ambient[1], cur_mat.ambient[2], cur_mat.ambient[3] * opaque)
+                cur_mat.set_diffuse_color(cur_mat.diffuse[0], cur_mat.diffuse[1], cur_mat.diffuse[2], cur_mat.diffuse[3] * opaque)
+                cur_mat.set_specular_color(cur_mat.specular[0], cur_mat.specular[1], cur_mat.specular[2], cur_mat.specular[3] * opaque)
+                cur_mat.set_emissive_color(cur_mat.emissive[0], cur_mat.emissive[1], cur_mat.emissive[2], cur_mat.emissive[3] * opaque)
+            elif line.startswith("Ni "):
+                # Index of refraction
+                pass
+            elif line.startswith("illum "):
+                # Illumination model
+                pass
+            elif line.startswith("map_Kd "):
+                cur_mat.set_tex_name(line[7:])
+
+        return results
+
+    def load_file(self, path: str):
+        f = open(path, 'r')
+        lines: list[str] = f.readlines()
+        lines = [line.strip() for line in lines]
+        f.close()
+
+        cur_obj: Object = None
+        for line in lines:
+            if line.startswith("#"):
+                continue
+            if line.startswith("mtllib "):
+                loaded_mats = self.load_material_library(path[0:path.rfind('\\')] + "\\" + line[7:])
+                for loaded_mat in loaded_mats:
+                    loaded_mat.index = len(self.mats)
+                    self.mats.append(loaded_mat)
+            elif line.startswith("o "):
+                cur_obj = Object()
+                cur_obj.set_name(line[2:])
+                self.objects.append(cur_obj)
+            elif line.startswith("v "):
+                components = line.split(' ')
+                cur_vert = Vertex()
+                cur_vert.set_pos(float(components[1]), float(components[2]), float(components[3]))
+                cur_obj.add_vert(cur_vert)
+            elif line.startswith("vt "):
+                components = line.split(' ')
+                cur_obj.uvs.append([float(components[1]), float(components[2])])
+            elif line.startswith("vn "):
+                components = line.split(' ')
+                cur_obj.normals.append([float(components[1]), float(components[2]), float(components[3])])
+            elif line.startswith("usemtl "):
+                cur_obj.set_material(self.get_mat_by_name(line[7:]))
+            elif line.startswith("s "):
+                pass
+            elif line.startswith("f "):
+                components = line.split(' ')
+                v1_components = components[1].split('/')
+                v2_components = components[2].split('/')
+                v3_components = components[3].split('/')
+                v1_vert = int(v1_components[0]) - 1
+                v1_uv = int(v1_components[1]) - 1
+                v1_normal = int(v1_components[2]) - 1
+                v2_vert = int(v2_components[0]) - 1
+                v2_uv = int(v2_components[1]) - 1
+                v2_normal = int(v2_components[2]) - 1
+                v3_vert = int(v3_components[0]) - 1
+                v3_uv = int(v3_components[1]) - 1
+                v3_normal = int(v3_components[2]) - 1
+                cur_obj.verts[v1_vert].set_uv(cur_obj.uvs[v1_uv][0], cur_obj.uvs[v1_uv][1])
+                cur_obj.verts[v1_vert].set_normal(cur_obj.normals[v1_normal][0], cur_obj.normals[v1_normal][1], cur_obj.normals[v1_normal][2])
+                cur_obj.verts[v2_vert].set_uv(cur_obj.uvs[v2_uv][0], cur_obj.uvs[v2_uv][1])
+                cur_obj.verts[v2_vert].set_normal(cur_obj.normals[v2_normal][0], cur_obj.normals[v2_normal][1], cur_obj.normals[v2_normal][2])
+                cur_obj.verts[v3_vert].set_uv(cur_obj.uvs[v3_uv][0], cur_obj.uvs[v3_uv][1])
+                cur_obj.verts[v3_vert].set_normal(cur_obj.normals[v3_normal][0], cur_obj.normals[v3_normal][1], cur_obj.normals[v3_normal][2])
+                tri = Triangle()
+                tri.set_indices(v1_vert, v2_vert, v3_vert)
+                cur_obj.tris.append(tri)
+
+
+
+if __name__ == "__main__":
+    input_file = WavefrontOBJFile()
+    input_file.load_file("C:\\Users\\yanfang_a\\Documents\\default.obj")
+    print(len(input_file.objects))
+    for obj in input_file.objects:
+        print(obj.name)
+        print(len(obj.verts))
+        print(len(obj.tris))
+        print(obj.mat.index)
+
+    print(len(input_file.mats))
+    for mat in input_file.mats:
+        print(mat.name)
+        print(mat.ambient)
+        print(mat.diffuse)
+        print(mat.specular)
+        print(mat.emissive)
+        print(mat.shininess)
+        print(mat.tex_name)
