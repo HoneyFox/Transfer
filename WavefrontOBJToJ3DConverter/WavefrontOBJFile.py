@@ -26,10 +26,10 @@ class Triangle:
 class Material:
     def __init__(self):
         self.name = None
-        self.ambient = None
-        self.diffuse = None
-        self.specular = None
-        self.emissive = None
+        self.ambient = [0, 0, 0, 0]
+        self.diffuse = [0, 0, 0, 0]
+        self.specular = [0, 0, 0, 0]
+        self.emissive = [0, 0, 0, 0]
         self.shininess = None
         self.tex_name = None
 
@@ -145,15 +145,16 @@ class WavefrontOBJFile:
         return results
 
     @staticmethod
-    def finish_obj(obj: Object, vert_set: set[tuple[int, int, int]], tri_list):
+    def finish_obj(obj: Object, used_positions: int, used_uvs: int, used_normals: int, vert_set: set[tuple[int, int, int]], tri_list):
         # Generate verts based on vert_set
         sorted_verts = {}  # Record distinct verts' index for usage from triangles.
         for vert in vert_set:
             sorted_verts[vert] = len(sorted_verts)
             new_vert = Vertex()
-            new_vert.set_pos(obj.positions[vert[0]][0], obj.positions[vert[0]][1], obj.positions[vert[0]][2])
-            new_vert.set_uv(obj.uvs[vert[1]][0], obj.uvs[vert[1]][1])
-            new_vert.set_normal(obj.normals[vert[2]][0], obj.normals[vert[2]][1], obj.normals[vert[2]][2])
+            # obj only stores its own vertex data so the index starts from 0, but tri stores global index.
+            new_vert.set_pos(obj.positions[vert[0] - used_positions][0], obj.positions[vert[0] - used_positions][1], obj.positions[vert[0] - used_positions][2])
+            new_vert.set_uv(obj.uvs[vert[1] - used_uvs][0], obj.uvs[vert[1] - used_uvs][1])
+            new_vert.set_normal(obj.normals[vert[2] - used_normals][0], obj.normals[vert[2] - used_normals][1], obj.normals[vert[2] - used_normals][2])
             obj.add_vert(new_vert)
         for tri in tri_list:
             new_tri = Triangle()
@@ -171,6 +172,11 @@ class WavefrontOBJFile:
         vert_set: set[tuple[int, int, int]] = set()
         tri_list = []
 
+        used_positions = 0
+        used_uvs = 0
+        used_normals = 0
+        used_tris = 0
+
         for line in lines:
             if line.startswith("#"):
                 continue
@@ -182,10 +188,20 @@ class WavefrontOBJFile:
             elif line.startswith("o "):
                 # Previous Object should be finished before continuing to the next Object.
                 if cur_obj is not None:
-                    WavefrontOBJFile.finish_obj(cur_obj, vert_set, tri_list)
+                    WavefrontOBJFile.finish_obj(cur_obj, used_positions, used_uvs, used_normals, vert_set, tri_list)
                     self.objects.append(cur_obj)
+                    used_positions += len(cur_obj.positions)
+                    used_uvs += len(cur_obj.uvs)
+                    used_normals += len(cur_obj.normals)
+                    used_tris += len(cur_obj.tris)
+                    vert_set.clear()
+                    tri_list.clear()
                 cur_obj = Object()
-                cur_obj.set_name(line[2:])
+                obj_name = line[2:]
+                underscore = obj_name.rfind('_')
+                if underscore >= 0:
+                    obj_name = obj_name[0:underscore]
+                cur_obj.set_name(obj_name)
             elif line.startswith("v "):
                 components = line.split(' ')
                 cur_obj.positions.append([float(components[1]), float(components[2]), float(components[3])])
@@ -220,5 +236,11 @@ class WavefrontOBJFile:
 
         # when reaching the end of file, the last Object should be finished too.
         if cur_obj is not None:
-            WavefrontOBJFile.finish_obj(cur_obj, vert_set, tri_list)
+            WavefrontOBJFile.finish_obj(cur_obj, used_positions, used_uvs, used_normals, vert_set, tri_list)
             self.objects.append(cur_obj)
+            used_positions += len(cur_obj.positions)
+            used_uvs += len(cur_obj.uvs)
+            used_normals += len(cur_obj.normals)
+            used_tris += len(cur_obj.tris)
+            vert_set.clear()
+            tri_list.clear()

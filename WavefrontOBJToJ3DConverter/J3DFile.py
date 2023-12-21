@@ -219,6 +219,9 @@ class J3DFile:
     def add_texture(self, name: str):
         if name.lower().endswith(".bmp"):
             name_without_extension = name[:-4]
+            existing_tex = self.get_tex_by_name(name_without_extension)
+            if existing_tex is not None:
+                return existing_tex.index
             tex_name = Name()
             tex_name.set_name(name_without_extension)
             tex = Texture()
