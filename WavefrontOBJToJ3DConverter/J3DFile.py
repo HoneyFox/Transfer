@@ -50,9 +50,9 @@ class Triangle:
         self.indices = [i0, i1, i2]
 
     def serialize(self, f):
-        f.write(self.indices[0].to_bytes(2, 'little', False))
-        f.write(self.indices[1].to_bytes(2, 'little', False))
-        f.write(self.indices[2].to_bytes(2, 'little', False))
+        f.write(self.indices[0].to_bytes(2, 'little', signed=False))
+        f.write(self.indices[1].to_bytes(2, 'little', signed=False))
+        f.write(self.indices[2].to_bytes(2, 'little', signed=False))
 
 class Texture:
     def __init__(self):
@@ -68,7 +68,7 @@ class Texture:
 
 class Model:
     def __init__(self):
-        self.modelName = None
+        self.model_name: Name = None
         self.offset = None
         self.unknown1 = [0, 0, 0, 0]  # What do these number mean? rotation perhaps?
         self.nextSiblingModelIndex = -1
@@ -86,8 +86,8 @@ class Model:
         self.index = -1
 
     def set_name(self, name: str):
-        self.modelName = Name()
-        self.modelName.set_name(name)
+        self.model_name = Name()
+        self.model_name.set_name(name)
 
     def set_offset(self, x: float, y: float, z: float):
         self.offset = [x, y, z]
@@ -121,28 +121,28 @@ class Model:
         self.render_order = render_order
 
     def serialize(self, f):
-        f.write(self.modelName)
+        self.model_name.serialize(f)
         f.write(struct.pack("<f", self.offset[0]))
         f.write(struct.pack("<f", self.offset[1]))
         f.write(struct.pack("<f", self.offset[2]))
-        f.write(self.unknown1[0].to_bytes(4, 'little', False))
-        f.write(self.unknown1[1].to_bytes(4, 'little', False))
-        f.write(self.unknown1[2].to_bytes(4, 'little', False))
-        f.write(self.unknown1[3].to_bytes(4, 'little', False))
-        f.write(self.nextSiblingModelIndex.to_bytes(4, 'little', True))
-        f.write(self.prevSiblingModelIndex.to_bytes(4, 'little', True))
-        f.write(self.parentModelIndex.to_bytes(4, 'little', True))
-        f.write(self.childModelIndex.to_bytes(4, 'little', True))
-        f.write(self.tri_num.to_bytes(2, 'little', False))
-        f.write(self.tri_offset.to_bytes(2, 'little', False))
-        f.write(self.vert_num.to_bytes(2, 'little', False))
-        f.write(self.vert_offset.to_bytes(2, 'little', False))
-        f.write(self.use_tex.to_bytes(2, 'little', False))
-        f.write(self.render_order.to_bytes(2, 'little', False))
-        f.write(self.unknown2[0].to_bytes(2, 'little', False))
-        f.write(self.unknown2[1].to_bytes(2, 'little', False))
-        f.write(self.unknown2[2].to_bytes(2, 'little', False))
-        f.write(self.unknown2[3].to_bytes(2, 'little', False))
+        f.write(self.unknown1[0].to_bytes(4, 'little', signed=False))
+        f.write(self.unknown1[1].to_bytes(4, 'little', signed=False))
+        f.write(self.unknown1[2].to_bytes(4, 'little', signed=False))
+        f.write(self.unknown1[3].to_bytes(4, 'little', signed=False))
+        f.write(self.nextSiblingModelIndex.to_bytes(4, 'little', signed=True))
+        f.write(self.prevSiblingModelIndex.to_bytes(4, 'little', signed=True))
+        f.write(self.parentModelIndex.to_bytes(4, 'little', signed=True))
+        f.write(self.childModelIndex.to_bytes(4, 'little', signed=True))
+        f.write(self.tri_num.to_bytes(2, 'little', signed=False))
+        f.write(self.tri_offset.to_bytes(2, 'little', signed=False))
+        f.write(self.vert_num.to_bytes(2, 'little', signed=False))
+        f.write(self.vert_offset.to_bytes(2, 'little', signed=False))
+        f.write(self.use_tex.to_bytes(2, 'little', signed=False))
+        f.write(self.render_order.to_bytes(2, 'little', signed=False))
+        f.write(self.unknown2[0].to_bytes(2, 'little', signed=False))
+        f.write(self.unknown2[1].to_bytes(2, 'little', signed=False))
+        f.write(self.unknown2[2].to_bytes(2, 'little', signed=False))
+        f.write(self.unknown2[3].to_bytes(2, 'little', signed=False))
 
 class Material:
     def __init__(self):
@@ -231,11 +231,19 @@ class J3DFile:
             print("Only BMP format is supported for textures.")
             return -1
 
+    def get_tex_by_name(self, tex_name: str):
+        test_name = Name()
+        test_name.set_name(tex_name)
+        for tex in self.texs:
+            if tex.name.name == test_name.name:
+                return tex
+        return None
+
     def add_material(self, material: Material):
         material.index = self.mat_num
         self.mats.append(material)
         self.mat_num += 1
-        return mat.index
+        return material.index
 
     def init_tri_tex_indices(self):
         self.tri_tex_indices = [-1] * self.tri_num
@@ -247,11 +255,11 @@ class J3DFile:
             self.tri_tex_indices[model.tri_offset:model.tri_num] = [texture.index] * model.tri_num
 
     def serialize(self, f):
-        f.write(self.vert_num.to_bytes(4, 'little', false))
-        f.write(self.tri_num.to_bytes(4, 'little', false))
-        f.write(self.tex_num.to_bytes(4, 'little', false))
-        f.write(self.model_num.to_bytes(4, 'little', false))
-        f.write(self.mat_num.to_bytes(4, 'little', false))
+        f.write(self.vert_num.to_bytes(4, 'little', signed=False))
+        f.write(self.tri_num.to_bytes(4, 'little', signed=False))
+        f.write(self.tex_num.to_bytes(4, 'little', signed=False))
+        f.write(self.model_num.to_bytes(4, 'little', signed=False))
+        f.write(self.mat_num.to_bytes(4, 'little', signed=False))
         for v in self.verts:
             v.serialize(f)
         for t in self.tris:
@@ -261,6 +269,6 @@ class J3DFile:
         for m in self.models:
             m.serialize(f)
         for i in self.tri_tex_indices:
-            f.write(i.to_bytes(1, 'little', true))
+            f.write(i.to_bytes(1, 'little', signed=True))
         for mat in self.mats:
             mat.serialize(f)
