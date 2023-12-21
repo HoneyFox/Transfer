@@ -104,16 +104,18 @@ class HierarchyTreeNode:
         self.node_data = node_data
 
     def calc_node_data(self):
-        if self.node_data is None:
-            return
-
         parent_offset: list[float] = None
+        relative_offset: list[float] = None
+
         if self.parent is not None and self.parent.node_data is not None:
-            parent_offset = self.parent.node_data[1]
+            # This is not root node nor root's child node.
+            parent_offset = self.parent.node_data[2]
         else:
             parent_offset = [0, 0, 0]
-        relative_offset: list[float] = self.node_data[1]
-        self.node_data[1] = [parent_offset[0] + relative_offset[0], parent_offset[1] + relative_offset[1], parent_offset[2] + relative_offset[2]]
+        if self.parent is not None:
+            # This is not root node.
+            relative_offset: list[float] = self.node_data[1]
+            self.set_node_data((self.node_data[0], self.node_data[1], [parent_offset[0] + relative_offset[0], parent_offset[1] + relative_offset[1], parent_offset[2] + relative_offset[2]]))
 
         for child in self.children:
             child.calc_node_data()
@@ -179,12 +181,12 @@ class Converter:
                 )
                 model.set_use_tex(obj.mat.tex_name is not None)
                 model.set_render_order(0)
-                offset = node.node_data[1]
+                total_offset = node.node_data[2]
                 # Convert from WavefrontOBJFile.Vertex to J3DFile.Vertex.
                 verts: list[J3DFile.Vertex] = []
                 for vert in obj.verts:
                     o_vert = J3DFile.Vertex()
-                    o_vert.set_pos(vert.pos[0] - offset[0], vert.pos[1] - offset[1], vert.pos[2] - offset[2])
+                    o_vert.set_pos(vert.pos[0] - total_offset[0], vert.pos[1] - total_offset[1], vert.pos[2] - total_offset[2])
                     o_vert.set_uv(vert.uv[0], vert.uv[1])
                     o_vert.set_normal(vert.normal[0], vert.normal[1], vert.normal[2])
                     verts.append(o_vert)
