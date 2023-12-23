@@ -239,8 +239,6 @@ class Converter:
         if self.enable_hierarchy:
             for node in root.deep_first_search():
                 obj: WavefrontOBJFile.Object = node.node_data[0]
-                print(node.node_name)
-                print(obj.mat.tex_name)
                 if obj.mat.tex_name is not None:
                     output_file.bind_model_texture(output_file.models[node_indices[node]], output_file.get_tex_by_name(obj.mat.tex_name[:-4]))
         else:
