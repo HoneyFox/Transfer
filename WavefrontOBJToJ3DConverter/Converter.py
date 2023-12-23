@@ -180,7 +180,7 @@ class Converter:
                     node_indices[child] if child is not None else -1
                 )
                 model.set_use_tex(obj.mat.tex_name is not None)
-                model.set_render_order(0)
+                model.set_mat_index(obj.mat.index)
                 total_offset = node.node_data[2]
                 # Convert from WavefrontOBJFile.Vertex to J3DFile.Vertex.
                 verts: list[J3DFile.Vertex] = []
@@ -205,7 +205,7 @@ class Converter:
                 model.index = output_file.model_num
                 model.set_model_index(model.index + 1 if i < len(input_file.objects) - 1 else -1, model.index - 1, -1, -1)
                 model.set_use_tex(obj.mat.tex_name is not None)
-                model.set_render_order(0)
+                model.set_mat_index(obj.mat.index)
                 # Convert from WavefrontOBJFile.Vertex to J3DFile.Vertex.
                 verts: list[J3DFile.Vertex] = []
                 for vert in obj.verts:
@@ -239,6 +239,8 @@ class Converter:
         if self.enable_hierarchy:
             for node in root.deep_first_search():
                 obj: WavefrontOBJFile.Object = node.node_data[0]
+                print(node.node_name)
+                print(obj.mat.tex_name)
                 if obj.mat.tex_name is not None:
                     output_file.bind_model_texture(output_file.models[node_indices[node]], output_file.get_tex_by_name(obj.mat.tex_name[:-4]))
         else:
@@ -258,6 +260,7 @@ if __name__ == "__main__":
         conv.convert()
     elif len(sys.argv) == 4:
         conv: Converter = Converter(sys.argv[2], sys.argv[3], (sys.argv[1].lower() == "-h"))
+        conv.convert()
     else:
         conv: Converter = Converter("C:\\Users\\yanfang_a\\Documents\\default.obj", "C:\\Users\\yanfang_a\\Documents\\default.J3D", True)
         conv.convert()

@@ -80,7 +80,7 @@ class Model:
         self.vert_num = 0
         self.vert_offset = 0
         self.use_tex = 0
-        self.render_order = 0  # FIXME: Not really sure if it is render-order or some kind of material index?
+        self.mat_index = 0
         self.unknown2 = [1, 0, 0, 0]  # What do these number mean?
 
         self.index = -1
@@ -117,8 +117,8 @@ class Model:
     def set_use_tex(self, use_tex: bool):
         self.use_tex = 1 if use_tex else 0
 
-    def set_render_order(self, render_order: int):
-        self.render_order = render_order
+    def set_mat_index(self, mat_index: int):
+        self.mat_index = mat_index
 
     def serialize(self, f):
         self.model_name.serialize(f)
@@ -138,7 +138,7 @@ class Model:
         f.write(self.vert_num.to_bytes(2, 'little', signed=False))
         f.write(self.vert_offset.to_bytes(2, 'little', signed=False))
         f.write(self.use_tex.to_bytes(2, 'little', signed=False))
-        f.write(self.render_order.to_bytes(2, 'little', signed=False))
+        f.write(self.mat_index.to_bytes(2, 'little', signed=False))
         f.write(self.unknown2[0].to_bytes(2, 'little', signed=False))
         f.write(self.unknown2[1].to_bytes(2, 'little', signed=False))
         f.write(self.unknown2[2].to_bytes(2, 'little', signed=False))
@@ -252,10 +252,9 @@ class J3DFile:
         self.tri_tex_indices = [-1] * self.tri_num
 
     def bind_model_texture(self, model: Model, texture: Texture):
-        if texture is None:
-            self.tri_tex_indices[model.tri_offset:model.tri_num] = [-1] * model.tri_num
-        else:
-            self.tri_tex_indices[model.tri_offset:model.tri_num] = [texture.index] * model.tri_num
+        index = -1 if texture is None else texture.index
+        for i in range(model.tri_offset, model.tri_offset + model.tri_num):
+            self.tri_tex_indices[i] = index
 
     def serialize(self, f):
         f.write(self.vert_num.to_bytes(4, 'little', signed=False))
