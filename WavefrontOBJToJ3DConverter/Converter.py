@@ -259,9 +259,6 @@ if __name__ == "__main__":
     elif len(sys.argv) == 4:
         conv: Converter = Converter(sys.argv[2], sys.argv[3], (sys.argv[1].lower() == "-h"))
         conv.convert()
-    else:
-        conv: Converter = Converter("C:\\Users\\yanfang_a\\Documents\\default.obj", "C:\\Users\\yanfang_a\\Documents\\default.J3D", True)
-        conv.convert()
 
 # Usage:
 #   py Converter.py [-h] <input WavefrontOBJ file path> <output J3D file path>
