@@ -1,4 +1,4 @@
-@echo on
+@echo off
 
 G:
 cd "G:\Fleet Command\Graphics"
